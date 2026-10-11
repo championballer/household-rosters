@@ -74,6 +74,32 @@ class RosterFlowTests(TestCase):
 
 
 class FirstRunTests(TestCase):
+    def test_existing_people_are_available_when_creating_a_roster(self):
+        first = Member.objects.create(name="First")
+        second = Member.objects.create(name="Second")
+        session = self.client.session
+        session["household_member_id"] = first.pk
+        session.save()
+
+        page = self.client.get(reverse("roster_new"))
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, f'name="participants" value="{first.pk}"')
+        self.assertContains(page, f'name="participants" value="{second.pk}"')
+
+        created = self.client.post(reverse("roster_new"), {
+            "name": "Cooking", "description": "",
+            "participants": [first.pk, second.pk],
+            "participant_order": f"{second.pk},{first.pk}",
+            "starter": second.pk, "request_id": str(uuid.uuid4()),
+        })
+        self.assertEqual(created.status_code, 302)
+        roster = Roster.objects.get(name="Cooking")
+        self.assertEqual(
+            list(roster.participants.values_list("member_id", flat=True)),
+            [second.pk, first.pk],
+        )
+        self.assertEqual(roster.current_participant.member_id, second.pk)
+
     def test_first_member_can_be_added_and_selected(self):
         client = Client()
         response = client.get(reverse("identity"))
