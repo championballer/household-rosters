@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}{{ title }}{% endblock %}{% block content %}
+<section class="narrow wide"><a href="{% if roster %}{% url 'roster_detail' roster.id %}{% else %}{% url 'dashboard' %}{% endif %}" class="back">← Back</a><h1>{{ title }}</h1>
+<form method="post" class="panel roster-editor" data-roster-editor>{% csrf_token %}{{ form.version }}{{ form.request_id }}
+  <p>{{ form.name.label_tag }}{{ form.name }}{{ form.name.errors }}</p><p>{{ form.description.label_tag }}{{ form.description }}{{ form.description.errors }}</p>
+  <fieldset><legend>Who takes part, and in what order?</legend><p class="hint">Choose people, then use the arrows to set the rotation order.</p>{{ form.participants.errors }}
+    <ul class="order-list" data-order-list>{% for checkbox in form.participants %}<li data-member-id="{{ checkbox.data.value }}"><label>{{ checkbox.tag }} {{ checkbox.choice_label }}</label><span class="order-controls"><button type="button" class="icon-button" data-move="up" aria-label="Move up">↑</button><button type="button" class="icon-button" data-move="down" aria-label="Move down">↓</button></span></li>{% endfor %}</ul>{{ form.participant_order }}{{ form.participant_order.errors }}
+  </fieldset><p>{{ form.starter.label_tag }}{{ form.starter }}{{ form.starter.errors }}<span class="hint">If blank, the first person in the order starts.</span></p>
+  <button class="button primary">Save roster</button>
+</form></section>{% endblock %}

@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block title %}{{ roster.name }} history{% endblock %}{% block content %}
+<a href="{% url 'roster_detail' roster.id %}" class="back">← {{ roster.name }}</a><div class="page-heading"><div><p class="eyebrow">Audit trail</p><h1>History</h1></div><a class="button" href="{% url 'roster_history_csv' roster.id %}">Download CSV</a></div>
+<section class="panel">{% include 'rosters/event_list.html' %}<nav class="pagination" aria-label="History pages">{% if page > 1 %}<a href="?page={{ page|add:'-1' }}">← Newer</a>{% endif %}<span>Page {{ page }} of {{ pages }}</span>{% if page < pages %}<a href="?page={{ page|add:'1' }}">Older →</a>{% endif %}</nav></section>{% endblock %}

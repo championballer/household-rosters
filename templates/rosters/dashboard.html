@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block title %}Household rosters{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">Shared around the house</p><h1>Who's up?</h1><p class="muted">Each responsibility moves to the next person when it’s done.</p></div><a class="button primary" href="{% url 'roster_new' %}">Create a roster</a></section>
+<section class="cards" data-dashboard>
+{% for roster in rosters %}<article class="card roster-card" data-roster-id="{{ roster.id }}" data-version="{{ roster.version }}">
+  <a class="card-main" href="{% url 'roster_detail' roster.id %}"><span class="eyebrow">Responsibility</span><h2>{{ roster.name }}</h2>{% if roster.description %}<p class="muted">{{ roster.description }}</p>{% endif %}
+  {% if roster.current_participant and roster.current_participant.is_enabled and roster.current_participant.member.is_active %}<p class="turn-label">Up next</p><p class="person">{{ roster.current_participant.member.name }}</p>{% else %}<p class="person muted">Add participants to start</p>{% endif %}</a>
+  {% if identity and roster.current_participant and roster.current_participant.is_enabled and roster.current_participant.member.is_active %}<a class="button done" href="{% url 'roster_complete' roster.id %}">Mark as done</a>{% else %}<a class="button" href="{% url 'roster_detail' roster.id %}">View roster</a>{% endif %}
+</article>{% empty %}<div class="empty card"><h2>No rosters yet</h2><p>Create a roster for a responsibility you share.</p><a class="button primary" href="{% url 'roster_new' %}">Create a roster</a></div>{% endfor %}
+</section><p class="live-status" aria-live="polite" data-live-status></p>
+{% endblock %}

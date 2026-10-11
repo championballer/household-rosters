@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% block title %}Rename {{ member.name }}{% endblock %}{% block content %}
+<section class="narrow"><a href="{% url 'members' %}" class="back">← People</a><h1>Rename {{ member.name }}</h1><form method="post" class="panel">{% csrf_token %}{{ form.as_p }}<button class="button primary">Save name</button></form></section>{% endblock %}

@@ -1,0 +1,8 @@
+[Unit]
+Description=Back up Household Rosters database
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/household-rosters
+ExecStart=%h/household-rosters/scripts/backup.sh
+UMask=0077

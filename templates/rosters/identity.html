@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block title %}Choose your name{% endblock %}{% block content %}
+<section class="narrow"><p class="eyebrow">Household identity</p><h1>Who are you?</h1><p class="muted">Your choice is recorded with actions so the household can see who submitted them.</p>
+<form method="post" class="panel">{% csrf_token %}{{ form.as_p }}<button class="button primary">Continue</button></form>
+{% if not has_members %}<p>No people yet. <a href="{% url 'members' %}">Add the first household member</a>.</p>{% endif %}</section>{% endblock %}

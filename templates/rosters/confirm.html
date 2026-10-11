@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}{{ title }}{% endblock %}{% block content %}<section class="narrow"><a href="{{ back_url }}" class="back">← Back</a><h1>{{ title }}</h1><p>{{ description }}</p><form method="post" class="panel">{% csrf_token %}{{ form.as_p }}<button class="button primary">Confirm</button></form></section>{% endblock %}
