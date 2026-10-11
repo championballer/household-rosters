@@ -32,7 +32,9 @@ class MemberActionForm(RequestForm):
 class RosterForm(RequestForm):
     name = forms.CharField(max_length=120)
     description = forms.CharField(max_length=2000, required=False, widget=forms.Textarea(attrs={"rows": 2}))
-    participants = forms.ModelMultipleChoiceField(queryset=Member.objects.none(), required=False)
+    participants = forms.ModelMultipleChoiceField(
+        queryset=Member.objects.none(), required=False, widget=forms.CheckboxSelectMultiple,
+    )
     participant_order = forms.CharField(required=False, widget=forms.HiddenInput)
     starter = forms.ModelChoiceField(queryset=Member.objects.none(), required=False)
 
@@ -41,7 +43,6 @@ class RosterForm(RequestForm):
         super().__init__(*args, **kwargs)
         active = Member.objects.filter(is_active=True).order_by("name")
         self.fields["participants"].queryset = active
-        self.fields["participants"].widget = forms.CheckboxSelectMultiple()
         self.fields["starter"].queryset = active
         self.fields["starter"].required = False
         if roster:
